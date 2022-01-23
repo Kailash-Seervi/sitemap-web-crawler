@@ -1,8 +1,6 @@
-from csv import excel
-from urllib import urlopen
+import urllib.request
 from link_finder import LinkFinder
 from general import *
-
 
 class Spider():
 
@@ -21,7 +19,7 @@ class Spider():
         Spider.queue_file = Spider.project_name + "/queue.txt"
         Spider.crawled_file = Spider.project_name + "/crawled.txt"
         self.boot()
-        self.crawl_page('Fist spider',Spider.base_url)
+        self.crawl_page('First spider',Spider.base_url)
 
     @staticmethod
     def boot():
@@ -37,16 +35,20 @@ class Spider():
             print('Queue '+ str(len(Spider.queue))+ '|'+'Crawled '+ str(len(Spider.crawled)))
             Spider.add_links_to_queue(Spider.gather_links(page_url))
             Spider.queue.remove(page_url)
-            Spider.crawled.remove(page_url)
+            Spider.crawled.add(page_url)
             Spider.update_files()
 
     @staticmethod
     def gather_links(page_url):
         html_string = ''
+        user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'   
+        headers={'User-Agent':user_agent,} 
+        request=urllib.request.Request(page_url,None,headers)
         try:
-            response = urlopen(page_url)
+            response = urllib.request.urlopen(request)
             if response.getheader('Content-Type') == 'text/html':
-                html_bytes = response.decode('utf-8')
+                html_bytes = response.read()
+                html_string = html_bytes.decode('utf-8')
             finder = LinkFinder(Spider.base_url, page_url)
             finder.feed(html_string)
         except:
