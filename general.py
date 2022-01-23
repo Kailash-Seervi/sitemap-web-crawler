@@ -6,7 +6,7 @@ def create_project_dir(directory):
         os.makedirs(directory)
 
 def create_data_files(project_name, base_url):
-    queue = project_name + '/queque.txt'
+    queue = project_name + '/queue.txt'
     crawled = project_name + '/crawled.txt'
     if not os.path.isfile(queue):
         write_file(queue, base_url)
