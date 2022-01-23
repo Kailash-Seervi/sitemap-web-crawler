@@ -25,3 +25,15 @@ def append_to_file(path, data):
 def delete_file_content(path):
     with open(path, 'w'):
         pass
+
+def file_to_set(filename):
+    results = set()
+    with open(filename, 'rt') as f:
+        for line in f:
+            results.add(line.replace('\n',''))
+    return results
+
+def set_to_file(links, file):
+    delete_file_content(file)
+    for link in sorted(links):
+        append_to_file(file, link)
